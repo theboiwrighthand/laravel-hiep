@@ -11,18 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('post_comments', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->bigInteger('parentId');
+        Schema::create('post_comment', function (Blueprint $table) {
+            $table->unsignedBigInteger('id')->primary()->unique();
+            $table->unsignedBigInteger('postId');
+            $table->unsignedBigInteger('parentId');
             $table->string('title', 100);
             $table->tinyInteger('published');
             $table->dateTime('createdAt');
             $table->dateTime('publishedAt');
             $table->text('content');
-
-            $table->foreignId('postId')->constrained('post','id');
         });
 
+        Schema::table('post_comment', function (Blueprint $table) {
+            $table->foreign('postId')->references('id')->on('post');
+            $table->foreign('parentId')->references('id')->on('post_comment');
+        });
     }
 
     /**
@@ -30,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('post_comments');
+        Schema::dropIfExists('post_comment');
     }
 };

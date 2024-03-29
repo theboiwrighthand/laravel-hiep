@@ -12,12 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('category', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->bigInteger('parentId');
+            $table->unsignedBigInteger('id')->primary()->unique();
+            $table->unsignedBigInteger('parentId');
             $table->string('title', 75);
             $table->string('metaTitle', 100);
             $table->string('slug',100);
             $table->text('content');
+        });
+        Schema::table('category', function (Blueprint $table) {
+            $table->foreign('parentId')->references('id')->on('category');
         });
     }
 
