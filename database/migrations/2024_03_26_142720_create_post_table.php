@@ -12,19 +12,23 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('post', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->bigInteger('parentId');
+            $table->unsignedBigInteger('id')->primary()->unique();
+            $table->unsignedBigInteger('authorId');
+            $table->unsignedBigInteger('parentId');
             $table->string('title', 75);
             $table->string('metaTitle', 100);
             $table->string('slug', 100);
-            $table->text('summary');
-            $table->dateTime('published');
+            $table->tinyText('sumary');
+            $table->tinyInteger('published')->default(0);
             $table->dateTime('createdAt');
             $table->dateTime('updatedAt');
             $table->dateTime('publishedAt');
             $table->text('content');
-            
-            $table->foreignId('authorId')->constrained('user', 'id');
+        });
+
+        Schema::table('post', function (Blueprint $table) {
+            $table->foreign('authorId')->references('id')->on('user');
+            $table->foreign('parentId')->references('id')->on('post');
         });
     }
 
