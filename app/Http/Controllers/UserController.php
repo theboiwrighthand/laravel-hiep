@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class UserController extends Controller
 {
@@ -12,7 +13,11 @@ class UserController extends Controller
      */
     public function index()
     {
-        echo "index";
+       //lay data
+       $users = User::all();
+    //    dd($users);
+       //reder ra View
+       return view('users.index',['users'=>$users]);
     }
 
     /**
