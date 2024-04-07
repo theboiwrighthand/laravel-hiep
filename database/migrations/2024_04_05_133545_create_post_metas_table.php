@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('post_meta', function (Blueprint $table) {
+        Schema::create('post_metas', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->foreignId('postId')->constrained('post','id');
+            $table->foreignId('postId')->constrained('posts','id');
             $table->string('key',50);
             $table->text('content');
 
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('post_meta');
+        Schema::dropIfExists('post_metas');
     }
 };

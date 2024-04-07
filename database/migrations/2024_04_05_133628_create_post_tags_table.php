@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('post_tag', function (Blueprint $table) {
-            $table->foreignId('postId')->constrained('post','id');
-            $table->foreignId('tagId')->constrained('tag','id');
+        Schema::create('post_tags', function (Blueprint $table) {
+            $table->foreignId('postId')->constrained('posts','id');
+            $table->foreignId('tagId')->constrained('tags','id');
         });
     }
 
@@ -22,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('post_tag');
+        Schema::dropIfExists('post_tags');
     }
 };

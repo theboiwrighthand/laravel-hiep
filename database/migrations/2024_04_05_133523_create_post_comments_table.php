@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('post_comment', function (Blueprint $table) {
+        Schema::create('post_comments', function (Blueprint $table) {
             $table->unsignedBigInteger('id')->primary()->unique();
             $table->unsignedBigInteger('postId');
             $table->unsignedBigInteger('parentId');
@@ -22,9 +22,9 @@ return new class extends Migration
             $table->text('content');
         });
 
-        Schema::table('post_comment', function (Blueprint $table) {
-            $table->foreign('postId')->references('id')->on('post');
-            $table->foreign('parentId')->references('id')->on('post_comment');
+        Schema::table('post_comments', function (Blueprint $table) {
+            $table->foreign('postId')->references('id')->on('posts');
+            $table->foreign('parentId')->references('id')->on('post_comments');
         });
     }
 
@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('post_comment');
+        Schema::dropIfExists('post_comments');
     }
 };
