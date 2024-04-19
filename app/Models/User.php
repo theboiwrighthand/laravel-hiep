@@ -7,6 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class User extends Model
 {
-    public $timestamps = false;
     use HasFactory;
+    protected $fillable = [
+        'firstName', 'middleName', 'lastName', 'mobile', 'email', 'passwordHash',
+        'registerAt', 'lastLogin', 'intro', 'profile'
+    ];
+
+    protected $hidden = [
+        'passwordHash'
+    ];
+
+    protected $dates = [
+        'registerAt', 'lastLogin'
+    ];
 }

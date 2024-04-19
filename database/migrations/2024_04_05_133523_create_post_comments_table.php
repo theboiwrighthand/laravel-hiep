@@ -16,10 +16,11 @@ return new class extends Migration
             $table->unsignedBigInteger('postId');
             $table->unsignedBigInteger('parentId');
             $table->string('title', 100);
+            $table->text('content');
             $table->tinyInteger('published');
             $table->dateTime('createdAt');
             $table->dateTime('publishedAt');
-            $table->text('content');
+            $table->dateTime('updatedAt')->nullable(); 
         });
 
         Schema::table('post_comments', function (Blueprint $table) {

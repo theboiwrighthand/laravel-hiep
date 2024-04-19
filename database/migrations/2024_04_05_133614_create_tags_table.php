@@ -16,7 +16,8 @@ return new class extends Migration
             $table->string('title', 75);
             $table->string('metaTitle', 100);
             $table->string('slug',100);
-            $table->text('content');
+            $table->text('content')->nullable();
+            $table->timestamps();
         });
     }
 

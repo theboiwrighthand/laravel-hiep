@@ -4,31 +4,32 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Faker\Factory as Faker;
-use App\Models\User;
 
 class UserTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
-    public function run(): void
+    public function run()
     {
         $faker = Faker::create();
 
-        for ($i = 0; $i < 10; $i++) {
-            User::create([
-                'id' => $faker->unique()->numberBetween($min = 0, $max = 2147483647),
-                'firtName' => $faker->firstName,
+        for ($i = 0; $i < 50; $i++) {
+            DB::table('users')->insert([
+                'firstName' => $faker->firstName,
                 'middleName' => $faker->lastName,
                 'lastName' => $faker->lastName,
                 'mobile' => $faker->phoneNumber,
-                'email' => $faker->unique()->safeEmail,
-                'passwordHash' =>  $faker->password(),
-                'registerAt' => now(),
-                'lastLogin' => now(),
-                'intro' => $faker->sentence,
-                'profile' => $faker->paragraph,
+                'email' => $faker->unique()->email,
+                'passwordHash' => md5($faker->password),
+                'registerAt' => $faker->dateTimeBetween('-2 years', 'now'),
+                'lastLogin' => $faker->dateTimeBetween('-1 year', 'now'),
+                'intro' => $faker->sentence(15),
+                'profile' => $faker->text(100),
+                'created_at' => now(),
+                'updated_at' => now(),
             ]);
         }
     }

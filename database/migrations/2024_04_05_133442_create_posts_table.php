@@ -20,10 +20,8 @@ return new class extends Migration
             $table->string('slug', 100);
             $table->tinyText('sumary');
             $table->tinyInteger('published')->default(0);
-            $table->dateTime('createdAt');
-            $table->dateTime('updatedAt');
-            $table->dateTime('publishedAt');
             $table->text('content');
+            $table->timestamps();
         });
 
         Schema::table('posts', function (Blueprint $table) {

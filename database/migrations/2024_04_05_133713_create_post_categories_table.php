@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('post_categories', function (Blueprint $table) {
             $table->foreignId('postId')->constrained('posts','id');
             $table->foreignId('categoryId')->constrained('categories','id');
+            $table->timestamps();
             
         });
     }

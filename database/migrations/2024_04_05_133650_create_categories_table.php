@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('metaTitle', 100);
             $table->string('slug',100);
             $table->text('content');
+            $table->timestamps();
         });
         Schema::table('categories', function (Blueprint $table) {
             $table->foreign('parentId')->references('id')->on('categories');

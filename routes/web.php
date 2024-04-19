@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TagController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 /*
@@ -13,8 +14,18 @@ use App\Http\Controllers\UserController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::view('/','welcome');
+Route::controller(UserController::class)
+->name('users.')
+->prefix('users')
+->group(function(){
+    Route::get('/','index')->name('index');
+    Route::get('/create','index')->name('create');
+    Route::get('/store','index')->name('store');
+    Route::get('/{id}','index')->name('edit');
 });
 
-Route::resource('users',UserController::class);
