@@ -19,13 +19,5 @@ use App\Http\Controllers\UserController;
 // });
 
 Route::view('/','welcome');
-Route::controller(UserController::class)
-->name('users.')
-->prefix('users')
-->group(function(){
-    Route::get('/','index')->name('index');
-    Route::get('/create','index')->name('create');
-    Route::get('/store','index')->name('store');
-    Route::get('/{id}','index')->name('edit');
-});
+
 

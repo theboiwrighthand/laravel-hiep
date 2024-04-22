@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -48,35 +50,27 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
     public function store(Request $request)
-    {
-        $validatedData = $request->validate([
-            'firstName' => 'required|string|max:50',
-            'middleName' => 'required|string|max:50',
-            'lastName' => 'required|string|max:50',
-            'mobile' => 'required|string|max:15|unique:users',
-            'email' => 'required|email|max:50|unique:users',
-            'password' => 'required|string|min:8',
-            'intro' => 'nullable|string',
-            'profile' => 'nullable|string|max:32',
-        ]);
-
-        $user = User::create([
-            'firstName' => $validatedData['firstName'],
-            'middleName' => $validatedData['middleName'],
-            'lastName' => $validatedData['lastName'],
-            'mobile' => $validatedData['mobile'],
-            'email' => $validatedData['email'],
-            'passwordHash' => Hash::make($validatedData['password']),
-            'registerAt' => now(),
-            'lastLogin' => now(),
-            'intro' => $validatedData['intro'],
-            'profile' => $validatedData['profile'],
-        ]);
-
-        return response()->json($user, 201);
+{
+    $validator = Validator::make($request->all(), [
+        'firstName' => 'required|string|max:50',
+        'middleName' => 'required|string|max:50',
+        'lastName' => 'required|string|max:50',
+        'mobile' => 'nullable|string|max:25',
+        'email' => 'required|email|unique:users,email',
+        'passwordHash' => 'required|string|max:32',
+        'registerAt' => 'required|date',
+        'lastLogin' => 'required|date',
+        'intro' => 'required|string',
+        'profile' => 'required|string|max:32'
+    ]);
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 422);
     }
-
+    $user = User::create($request->all());
+    return response()->json($user, 201);
+}
     /**
      * Display the specified resource.
      *
@@ -98,35 +92,39 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = User::findOrFail($id);
-
-        $validatedData = $request->validate([
-            'firstName' => 'required|string|max:50',
-            'middleName' => 'required|string|max:50',
-            'lastName' => 'required|string|max:50',
-            'mobile' => 'required|string|max:15|unique:users,mobile,' . $user->id,
-            'email' => 'required|email|max:50|unique:users,email,' . $user->id,
-            'password' => 'nullable|string|min:8',
-            'intro' => 'nullable|string',
-            'profile' => 'nullable|string|max:32',
+        $validator = Validator::make($request->all(), [
+            'firstName' => 'sometimes|required|string|max:50',
+            'middleName' => 'sometimes|required|string|max:50',
+            'lastName' => 'sometimes|required|string|max:50',
+            'mobile' => 'nullable|string|max:25',
+            'email' => 'sometimes|required|email|unique:users,email,' . $id,
+            'passwordHash' => 'sometimes|required|string|max:32',
+            'registerAt' => 'sometimes|required|date',
+            'lastLogin' => 'sometimes|required|date',
+            'intro' => 'sometimes|required|string',
+            'profile' => 'sometimes|required|string|max:32'
         ]);
-
-        $user->firstName = $validatedData['firstName'];
-        $user->middleName = $validatedData['middleName'];
-        $user->lastName = $validatedData['lastName'];
-        $user->mobile = $validatedData['mobile'];
-        $user->email = $validatedData['email'];
-
-        if ($request->has('password')) {
-            $user->passwordHash = Hash::make($validatedData['password']);
-        }
-
-        $user->intro = $validatedData['intro'];
-        $user->profile = $validatedData['profile'];
-        $user->lastLogin = now();
+    
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }  
+        $user = User::findOrFail($id);   
+        // Chỉ cập nhật các trường có trong request
+        $user->fill($request->only([
+            'firstName',
+            'middleName',
+            'lastName',
+            'mobile',
+            'email',
+            'passwordHash',
+            'registerAt',
+            'lastLogin',
+            'intro',
+            'profile'
+        ]));
+    
         $user->save();
-
-        return response()->json($user);
+        return response()->json($user, 200);
     }
 
     /**
@@ -139,7 +137,11 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
         $user->delete();
-
-        return response()->json(['message' => 'User deleted'], 204);
+        $res=[
+            "message"=>"User deleted",
+            "status"=>200,
+            "data"=>$user,
+        ];
+        return response()->json($res);
     }
 }
