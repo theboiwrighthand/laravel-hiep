@@ -136,9 +136,11 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = User::findOrFail($id);
+        $user->posts()->whereNotNull('parentId')->update(['parentId' => null]);
+        $user->posts()->delete();
         $user->delete();
         $res=[
-            "message"=>"User deleted",
+            "message"=>"User and related posts deleted",
             "status"=>200,
             "data"=>$user,
         ];

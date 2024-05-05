@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PostController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
@@ -27,5 +28,13 @@ Route::group(['prefix' => 'users'], function() {
     Route::post('/create', [UserController::class, 'store']);
     Route::put('/update/{id}', [UserController::class, 'update']);
     Route::delete('/delete/{id}', [UserController::class, 'destroy']);
+});
+
+Route::group(['prefix' => 'posts'], function() {
+    Route::get('/', [PostController::class, 'index']);
+    Route::get('/{id}', [PostController::class, 'show']);
+    Route::post('/create', [PostController::class, 'store']);
+    Route::put('/update/{id}', [PostController::class, 'update']);
+    Route::delete('/delete/{id}', [PostController::class, 'destroy']);
 });
 

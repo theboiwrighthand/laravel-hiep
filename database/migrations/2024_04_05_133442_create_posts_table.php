@@ -25,7 +25,7 @@ return new class extends Migration
         });
 
         Schema::table('posts', function (Blueprint $table) {
-            $table->foreign('authorId')->references('id')->on('users');
+            $table->foreign('authorId')->references('id')->on('users') ->onDelete('cascade');
             $table->foreign('parentId')->references('id')->on('posts');
         });
     }
