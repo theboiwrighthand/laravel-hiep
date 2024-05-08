@@ -10,8 +10,6 @@ class Post extends Model
 {
     use HasUuids;
     use HasFactory;
-    protected $fillable = ['authorId','parentId','title','metaTitle','slug','sumary','published','content',];
-    
+    protected $fillable = ['id', 'authorId','parentId', 'tag', 'title','metaTitle','slug','sumary','published','content'];
 
-    
 }

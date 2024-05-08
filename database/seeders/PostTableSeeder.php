@@ -17,11 +17,12 @@ class PostTableSeeder extends Seeder
     {
         $faker = Faker::create();
         $posts = [];
-        for ($i = 0; $i < 20; $i++) {
+        for ($i = 0; $i < 10; $i++) {
             $post = new Post();
             $post->id = $i + 1;
             $post->authorId = $faker->numberBetween(1, 20);
             $post->parentId =  $i + 1;
+            $post->tag = $i + 1;
             $post->title = $faker->sentence(6);
             $post->metaTitle = $faker->sentence(6);
             $post->slug = $faker->slug;

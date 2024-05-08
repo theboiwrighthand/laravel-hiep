@@ -15,7 +15,8 @@ return new class extends Migration
             $table->unsignedBigInteger('id')->primary()->unique();
             $table->unsignedBigInteger('authorId');
             $table->unsignedBigInteger('parentId');
-            $table->string('title', 75);
+            $table->unsignedBigInteger('tag');
+            $table->string('title', 700);
             $table->string('metaTitle', 100);
             $table->string('slug', 100);
             $table->tinyText('sumary');
@@ -27,6 +28,7 @@ return new class extends Migration
         Schema::table('posts', function (Blueprint $table) {
             $table->foreign('authorId')->references('id')->on('users') ->onDelete('cascade');
             $table->foreign('parentId')->references('id')->on('posts');
+            $table->index('id');
         });
     }
 

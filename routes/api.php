@@ -38,3 +38,13 @@ Route::group(['prefix' => 'posts'], function() {
     Route::delete('/delete/{id}', [PostController::class, 'destroy']);
 });
 
+Route::group(['prefix' => 'tags'], function() {
+    Route::get('/', [TagController::class, 'index']);
+    Route::get('/{id}', [TagController::class, 'show']);
+    Route::post('/create', [TagController::class, 'store']);
+    Route::put('/update/{id}', [TagController::class, 'update']);
+    Route::delete('/delete/{id}', [TagController::class, 'destroy']);
+    Route::delete('/find/{name}', [TagController::class, 'find']);
+});
+
+

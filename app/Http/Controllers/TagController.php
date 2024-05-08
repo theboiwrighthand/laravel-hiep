@@ -14,7 +14,8 @@ class TagController extends Controller
      */
     public function index()
     {
-        echo 'hiep';
+        $tags = Tag::all();
+        return response()->json($tags);
     }
 
     /**
@@ -32,11 +33,8 @@ class TagController extends Controller
     {
         $input = $request->all();
         $validator = Validator::make($input, [
-            'title' => 'required',
-            'metaTitle' => 'required',
+            'name' => 'required',
             'slug'=> 'required',
-            'content' => 'required'
-
         ]);
         if ($validator->fails()) {
             $arr = [
@@ -47,12 +45,7 @@ class TagController extends Controller
             return response()->json($arr, 200);
         }
         $product = Tag::create($input);
-        $arr = [
-            'status' => true,
-            'message' => "Sản phẩm đã lưu thành công",
-            'data' => new TagResource($product)
-        ];
-        return response()->json($arr, 201);
+        return response()->json($product, 201);
     }
 
 
@@ -61,7 +54,8 @@ class TagController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $tag = Tag::findOrFail($id);
+        return response()->json($tag);
     }
 
     /**
@@ -77,7 +71,24 @@ class TagController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $input = $request->all();
+        $validator = Validator::make($input, [
+            'name' => 'required',
+            'slug'=> 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+        $tag = Tag::findOrFail($id);
+        // Chỉ cập nhật các trường có trong request
+        $tag->fill($request->only([
+            'name',
+            'slug',
+        ]));
+
+        $tag->save();
+        return response()->json($tag, 200);
     }
 
     /**
@@ -85,6 +96,17 @@ class TagController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $tag = Tag::findOrFail($id);
+        $tag->delete();
+        $res = [
+            "message" => "Tag deleted",
+            "status" => 200,
+            "data" => $tag,
+        ];
+        return response()->json($res);
+    }
+
+    public function find(string $name) {
+        return Tag::where('name', '=', $name)->firstOrFail();
     }
 }

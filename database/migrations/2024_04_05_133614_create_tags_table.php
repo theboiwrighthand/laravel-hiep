@@ -13,11 +13,13 @@ return new class extends Migration
     {
         Schema::create('tags', function (Blueprint $table) {
             $table->bigIncrements('id', 20);
-            $table->string('title', 75);
-            $table->string('metaTitle', 100);
+            $table->string('name', 75);
             $table->string('slug',100);
-            $table->text('content')->nullable();
             $table->timestamps();
+        });
+
+        Schema::table('tags', function (Blueprint $table) {
+            $table->index('id');
         });
     }
 
