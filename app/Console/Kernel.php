@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Console;
-
 use App\Mail\PostCountMail;
 use App\Models\Post;
 use App\Models\User;
@@ -19,7 +18,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->call(function(){
-            DB::table('users')->where('id', 1)->delete();
+            DB::table('tags')->where('id', 5)->delete();
         })->everyMinute();
     }
 
